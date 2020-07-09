@@ -12,16 +12,22 @@ namespace TwitchBot.NET.Modules
     public class SpotifyModule : CommandModule
     {
         [Command("play", CommandType.Chat)]
-        public void Play(CommandContext ctx, string message)
+        public void Play(string message)
         {
-            ctx.Client.SendMessage("leMetallicat", message, false);
+            CommandContext.Client.SendMessage("leMetallicat", message, false);
             Console.WriteLine("Play");
         }
 
-        [Command("stop", CommandType.Chat)]
-        public void Stop( CommandContext ctx, string message )
+        [Command("echo", CommandType.Chat | CommandType.Whisper)]
+        public void Echo(string first, string second)
         {
-            ctx.Client.SendMessage("leMetallicat", message, false);
+            CommandContext.Client.SendMessage("leMetallicat", first + " " + second, false);
+        }
+
+        [Command("stop", CommandType.Chat)]
+        public void Stop(string message )
+        {
+            CommandContext.Client.SendMessage("leMetallicat", message, false);
             Console.WriteLine("Stop");
         }
     }
