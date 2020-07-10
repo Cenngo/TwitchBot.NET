@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -20,7 +22,6 @@ namespace TwitchBot.NET.Commands
 
         public CommandHandler()
         {
-
         }
 
         public void DiscoverModules(Assembly assembly)
@@ -31,19 +32,25 @@ namespace TwitchBot.NET.Commands
 
             foreach(var cla in classes)
             {
-                Console.WriteLine($"Activated {cla}");
-            }
+                Console.WriteLine($"Activated Command Module : {cla}");
+            }            
         }
 
-        public void ExecuteChat(CommandContext ctx)
+        public void ExecuteChat(CommandContext ctx, IServiceProvider services)
         {
             var method = _methods.Where(x => ( (CommandAttribute)Attribute.GetCustomAttribute(x, typeof(CommandAttribute)) ).Type == CommandType.Chat).
                 First(x => ( (CommandAttribute)Attribute.GetCustomAttribute(x, typeof(CommandAttribute)) ).Command.ToLower() == ctx.Command.ToLower());
 
-            if (method.DeclaringType! is ICommandModule)
-                return;
+            InvokeMethod(method, services, ctx);
+        }
 
-            var obj = Activator.CreateInstance(method.DeclaringType);
+        public void ExecuteWhisper ( CommandContext ctx, IServiceProvider services )
+        {
+            var method = _methods.Where(x => ( (CommandAttribute)Attribute.GetCustomAttribute(x, typeof(CommandAttribute)) ).Type == CommandType.Whisper).
+                First(x => ( (CommandAttribute)Attribute.GetCustomAttribute(x, typeof(CommandAttribute)) ).Command.ToLower() == ctx.Command.ToLower());
+
+            var obj = ActivatorUtilities.CreateInstance(services, method.DeclaringType);
+
             ( obj as CommandModule ).CommandContext = ctx;
             var args = new List<object>();
 
@@ -55,19 +62,14 @@ namespace TwitchBot.NET.Commands
             }
             catch (Exception)
             {
-                
+
             }
         }
 
-        public void ExecuteWhisper ( CommandContext ctx )
+        private void InvokeMethod(MethodInfo method, IServiceProvider services, CommandContext ctx)
         {
-            var method = _methods.Where(x => ( (CommandAttribute)Attribute.GetCustomAttribute(x, typeof(CommandAttribute)) ).Type == CommandType.Whisper).
-                First(x => ( (CommandAttribute)Attribute.GetCustomAttribute(x, typeof(CommandAttribute)) ).Command.ToLower() == ctx.Command.ToLower());
+            var obj = ActivatorUtilities.CreateInstance(services, method.DeclaringType);
 
-            if (method.DeclaringType! is ICommandModule)
-                return;
-
-            var obj = Activator.CreateInstance(method.DeclaringType);
             ( obj as CommandModule ).CommandContext = ctx;
             var args = new List<object>();
 
@@ -77,9 +79,9 @@ namespace TwitchBot.NET.Commands
             {
                 method.Invoke(obj, ctx.Args.ToArray());
             }
-            catch
+            catch (Exception)
             {
-                 
+
             }
         }
     }

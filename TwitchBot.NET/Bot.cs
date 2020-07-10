@@ -12,9 +12,8 @@ namespace TwitchBot.NET
     public class Bot
     {
         private readonly TwitchClient _client;
-        private readonly EventHandler _handler;
 
-        public Bot ( string username, string token, string channel, ClientOptions? options, char[] prefixes )
+        public Bot ( string username, string token, string channel, ClientOptions? options, char[] chatPrefixes = null, char[] whisperPrefixes = null, bool duplicateChatPrefixes = false )
         {
             var credentials = new ConnectionCredentials(username, token);
             var _options = options ?? new ClientOptions
@@ -27,12 +26,31 @@ namespace TwitchBot.NET
             _client = new TwitchClient(wsClient);
             _client.Initialize(credentials, channel);
             
-            foreach(var prefix in prefixes)
+            if(chatPrefixes != null)
             {
-                _client.AddChatCommandIdentifier(prefix);
+                foreach (var prefix in chatPrefixes)
+                {
+                    _client.AddChatCommandIdentifier(prefix);
+
+                    if (duplicateChatPrefixes)
+                        _client.AddWhisperCommandIdentifier(prefix);
+                }
             }
 
-            _handler = new EventHandler(_client);
+            if(whisperPrefixes != null)
+            {
+                foreach (var prefix in whisperPrefixes)
+                {
+                    _client.AddWhisperCommandIdentifier(prefix);
+                }
+            }
+
+            var serviceManager = new ServiceManager(_client);
+            var services = serviceManager.BuildServiceProvider();
+
+            var eventHandler = new EventHandler(_client, services);
+            eventHandler.LogColor = ConsoleColor.Red;
+            eventHandler.InstallEventHandler();
         }
 
         public async Task ConnectAsync()

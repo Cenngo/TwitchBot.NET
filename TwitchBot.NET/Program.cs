@@ -2,11 +2,11 @@
 
 namespace TwitchBot.NET
 {
-    class Program
+    public class Program
     {
         static void Main ( string[] args )
         {
-            var bot = new Bot("lemetallicat", "jzeym90mjxrlyjlmlzos97e0x2ggsg", "leMetallicat", null, new char[] { '!', '>', '-'});
+            var bot = new Bot("lemetallicat", "jzeym90mjxrlyjlmlzos97e0x2ggsg", "leMetallicat", null, new char[] { '!', '>', '-'}, null);
             bot.ConnectAsync().GetAwaiter().GetResult();
         }
     }
