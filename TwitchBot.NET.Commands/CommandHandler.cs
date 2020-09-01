@@ -74,6 +74,9 @@ namespace TwitchBot.NET.Commands
             cla.CommandContext = ctx;
 
             var parameters = method.GetParameters();
+            if (ctx.Args.Count() < parameters.Count())
+                return;
+            
             var args = new object[parameters.Count()];
 
             foreach (var parameter in parameters)
@@ -87,8 +90,6 @@ namespace TwitchBot.NET.Commands
                 }
                 else
                 {
-                    var variable = ctx.Args.ElementAt(position);
-                    if (variable.GetType() != typeof(string))
                     args[position] = ctx.Args.ElementAt(position);
                 }
             }

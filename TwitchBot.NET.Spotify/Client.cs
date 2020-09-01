@@ -76,10 +76,9 @@ namespace TwitchBot.NET.Spotify
             var searchResponse = await _client.Search.Item(new SearchRequest(SearchRequest.Types.Track, query));
             var track = searchResponse.Tracks.Items[0];
 
-            if(_client.Player == null)
+            if(_client.Player.GetCurrentPlayback().Result == null)
             {
                 throw new Exception("No Active Spotify Player Detected. Please Start Playback on a Supported Device");
-                return;
             }
 
             if (_client.Player.GetCurrentPlayback().Result.IsPlaying)
