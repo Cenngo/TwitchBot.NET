@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SpotifyAPI.Web;
+using System;
 
 namespace TwitchBot.NET
 {

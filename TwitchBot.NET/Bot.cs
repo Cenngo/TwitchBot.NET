@@ -25,7 +25,7 @@ namespace TwitchBot.NET
             var wsClient = new WebSocketClient(_options);
             _client = new TwitchClient(wsClient);
             _client.Initialize(credentials, channel);
-            
+
             if(chatPrefixes != null)
             {
                 foreach (var prefix in chatPrefixes)
@@ -49,7 +49,7 @@ namespace TwitchBot.NET
             var services = serviceManager.BuildServiceProvider();
 
             var eventHandler = new EventHandler(_client, services);
-            eventHandler.LogColor = ConsoleColor.Red;
+            eventHandler.LogColor = ConsoleColor.Blue;
             eventHandler.InstallEventHandler();
         }
 

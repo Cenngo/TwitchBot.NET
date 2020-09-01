@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TwitchBot.NET.Commands.Interfaces;
@@ -13,14 +14,19 @@ namespace TwitchBot.NET.Commands
     {
         public CommandContext CommandContext { get; internal set; }
 
-        protected void Reply(string channel, string message, bool dryRun = false)
+        public void Reply(string channel, string message, bool dryRun = false)
         {
             CommandContext.Client.SendMessage(channel, message, dryRun);
         }
 
-        protected void Reply(JoinedChannel channel, string message, bool dryRun = false )
+        public void Reply(JoinedChannel channel, string message, bool dryRun = false )
         {
             CommandContext.Client.SendMessage(channel, message, dryRun);
+        }
+        
+        public void SetContext(CommandContext ctx)
+        {
+            CommandContext = ctx;
         }
     }
 }

@@ -34,7 +34,7 @@ namespace TwitchBot.NET
             Console.Title = Assembly.GetExecutingAssembly().GetName().Name;
 
             _handler = new CommandHandler();
-            _handler.DiscoverModules(Assembly.GetEntryAssembly());
+            _handler.DiscoverModules(Assembly.GetEntryAssembly(), _services);
         }
 
         public void InstallEventHandler()
@@ -48,7 +48,7 @@ namespace TwitchBot.NET
         private void WhisperCommandReceived ( object sender, TwitchLib.Client.Events.OnWhisperCommandReceivedArgs e )
         {
             var ctx = new CommandContext(_client, e.Command);
-            _handler.ExecuteWhisper(ctx, _services);
+            _handler.ExecuteWhisper(ctx);
         }
 
         private void Log ( object sender, TwitchLib.Client.Events.OnLogArgs e )
@@ -68,7 +68,7 @@ namespace TwitchBot.NET
         private void ChatCommandRecieved ( object sender, TwitchLib.Client.Events.OnChatCommandReceivedArgs e )
         {
             var ctx = new CommandContext(_client, e.Command);
-            _handler.ExecuteChat(ctx, _services);
+            _handler.ExecuteChat(ctx);
         }
     }
 }

@@ -23,29 +23,30 @@ namespace TwitchBot.NET.Modules
             this.spotifyClient = spotifyClient;
         }
 
-        [Command("play", CommandType.Chat)]
-        public async Task Play(string message)
+        [Command("ping", CommandType.Chat)]
+        public async Task Ping()
         {
-            await spotifyClient.QueueTrack(message);
+            Reply("leMetallicat", "Pong", false);
         }
 
-        [Command("echo", CommandType.Chat | CommandType.Whisper)]
-        public void Echo(string first, string second)
+        [Command("play", CommandType.Chat)]
+        public async Task Play(params string[] message)
         {
-            CommandContext.Client.SendMessage("leMetallicat", first + " " + second, false);
+            var query = String.Join(' ', message);
+            Reply("lemetallicat", $"Searching: {query}");
+            await spotifyClient.QueueTrack(query);
+        }
+
+        [Command("echo", CommandType.Chat)]
+        public async Task Echo(string first, string second)
+        {
+            Reply("lemetallicat", $"First: {first}, Second: {second}");
         }
 
         [Command("auth", CommandType.Chat)]
         public async Task Auth ( )
         {
             await spotifyClient.GetAuthorization();
-        }
-
-        [Command("stop", CommandType.Chat)]
-        public void Stop(string message )
-        {
-            CommandContext.Client.SendMessage("leMetallicat", message, false);
-            Console.WriteLine("Stop");
         }
 
         [Command("test", CommandType.Chat)]
