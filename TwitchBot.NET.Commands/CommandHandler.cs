@@ -44,8 +44,11 @@ namespace TwitchBot.NET.Commands
 
         public void ExecuteChat(CommandContext ctx)
         {
+            if (ctx.ChatCommand == null)
+                return;
+
             var methods = _methods.Where(x => ( (CommandAttribute)Attribute.GetCustomAttribute(x, typeof(CommandAttribute)) ).Type == CommandType.Chat).
-            Where(x => ( (CommandAttribute)Attribute.GetCustomAttribute(x, typeof(CommandAttribute)) ).Command.ToLower() == ctx.Command.ToLower());
+            Where(x => ( (CommandAttribute)Attribute.GetCustomAttribute(x, typeof(CommandAttribute)) ).Command.ToLower() == ctx.ChatCommand.CommandText.ToLower());
 
             if (methods.Any())
                 InvokeMethod(methods.First(), ctx);
@@ -55,8 +58,11 @@ namespace TwitchBot.NET.Commands
 
         public void ExecuteWhisper ( CommandContext ctx)
         {
+            if (ctx.WhisperCommand == null)
+                return;
+
             var methods = _methods.Where(x => ( (CommandAttribute)Attribute.GetCustomAttribute(x, typeof(CommandAttribute)) ).Type == CommandType.Whisper).
-            Where(x => ( (CommandAttribute)Attribute.GetCustomAttribute(x, typeof(CommandAttribute)) ).Command.ToLower() == ctx.Command.ToLower());
+            Where(x => ( (CommandAttribute)Attribute.GetCustomAttribute(x, typeof(CommandAttribute)) ).Command.ToLower() == ctx.WhisperCommand.CommandText.ToLower());
 
             if (methods.Any())
                 InvokeMethod(methods.First(), ctx);
@@ -90,6 +96,7 @@ namespace TwitchBot.NET.Commands
                 }
                 else
                 {
+
                     args[position] = ctx.Args.ElementAt(position);
                 }
             }

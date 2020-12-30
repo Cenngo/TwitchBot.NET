@@ -9,23 +9,21 @@ namespace TwitchBot.NET.Commands.Models
     public class CommandContext
     {
         public TwitchClient Client { get; private set; }
-        public string Command { get; private set; }
-        public TwitchLibMessage Message { get; private set; }
+        public ChatCommand ChatCommand { get; private set; }
+        public WhisperCommand WhisperCommand { get; private set; }
         public IEnumerable<string> Args { get; private set; }
 
         public CommandContext(TwitchClient client, ChatCommand command)
         {
             Client = client;
-            Message = command.ChatMessage;
-            Command = command.CommandText;
+            ChatCommand = command;
             Args = command.ArgumentsAsList;
         }
 
         public CommandContext(TwitchClient client, WhisperCommand command)
         {
             Client = client;
-            Message = command.WhisperMessage;
-            Command = command.CommandText;
+            WhisperCommand = command;
             Args = command.ArgumentsAsList;
         }
     }

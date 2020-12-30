@@ -26,21 +26,21 @@ namespace TwitchBot.NET.Modules
         [Command("ping", CommandType.Chat)]
         public async Task Ping()
         {
-            Reply("leMetallicat", "Pong", false);
+            Reply("Pong", false);
         }
 
         [Command("play", CommandType.Chat)]
         public async Task Play(params string[] message)
         {
             var query = String.Join(' ', message);
-            Reply("lemetallicat", $"Searching: {query}");
+            Reply( $"Searching: {query}");
             await spotifyClient.QueueTrack(query);
         }
 
         [Command("echo", CommandType.Chat)]
         public async Task Echo(string first, string second)
         {
-            Reply("lemetallicat", $"First: {first}, Second: {second}");
+            Reply($"First: {first}, Second: {second}");
         }
 
         [Command("auth", CommandType.Chat)]

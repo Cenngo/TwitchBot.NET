@@ -10,8 +10,7 @@ namespace TwitchBot.NET.Commands.Interfaces
     {
         CommandContext CommandContext { get; }
 
-        void Reply ( JoinedChannel channel, string message, bool dryRun );
-        void Reply ( string channel, string message, bool dryRun );
+        void Reply (string message, bool dryRun );
         void SetContext ( CommandContext ctx );
     }
 }

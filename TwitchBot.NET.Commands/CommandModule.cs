@@ -14,14 +14,9 @@ namespace TwitchBot.NET.Commands
     {
         public CommandContext CommandContext { get; internal set; }
 
-        public void Reply(string channel, string message, bool dryRun = false)
+        public void Reply(string message, bool dryRun = false)
         {
-            CommandContext.Client.SendMessage(channel, message, dryRun);
-        }
-
-        public void Reply(JoinedChannel channel, string message, bool dryRun = false )
-        {
-            CommandContext.Client.SendMessage(channel, message, dryRun);
+            CommandContext.Client.SendMessage(CommandContext.ChatCommand.ChatMessage.Channel, message, dryRun);
         }
         
         public void SetContext(CommandContext ctx)
